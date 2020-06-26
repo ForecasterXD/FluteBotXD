@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Sound Player</title>
+    <script src='node_modules/howler/src/howler.core.js'></script>
+    
+
+    
+
+
+<body>
+    Sound Player Test
+    <button onclick="playYeet()">Play</button>
+    <button id="AudioContext">Resume</button>
+    <script> 
+        
+        function playYeet()
+        {
+            var sound = new Howl({
+                src: ['adlibs/yeet.mp3']
+            });
+            sound.play();
+            console.log('playing');
+            ws.send('Playing Yeet');
+        }
+        
+        function playSound(command)
+        {
+            let file = command.replace('!','');
+            file += '.mp3';
+            var sound = new Howl(
+                {
+                    src: [`adlibs/${file}`]
+                });
+            sound.play();
+            console.log(`Playing ${file}`);
+        }
+    </script>
+    <script src='static/client.js'></script>
+    
+</body>
+</head>
+</html>
