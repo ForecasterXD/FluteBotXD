@@ -52,39 +52,48 @@ function onMessageHandler (target, tags, msg, self)
     //Ignore messages without '!'
     if (commandName[0] === '!')
     {
-        if ("moderator" in tags["badges"] || "broadcaster" in tags["badges"])
+        //Moderator Commands Bug: Crashes because tags is NULL
+        try
         {
-            switch(commandName)
+            if("moderator" in tags["badges"] || "broadcaster" in tags["badges"])
             {
-                //Mute Sounds
-                case '!mute':
+                switch(commandName)
+                {
+                    //Mute Sounds
+                    case '!mute':
 
-                    if (mute === false)
-                    {
-                        mute = true;
-                        client.say(target, `@${tags["display-name"]}, sounds muted`);
-                    }
-                    break;
+                        if (mute === false)
+                        {
+                            mute = true;
+                            client.say(target, `@${tags["display-name"]}, sounds muted`);
+                        }
+                        break;
 
-                //Unmute Sounds
-                case '!unmute':
-                    if (mute === true)
-                    {
-                        mute = false;
-                        client.say(target, `@${tags["display-name"]}, sounds unmuted`);
-                    }
-                    break;
-                
-                //Disconnect Bot
-                case '!leave':
-                    client.action('Forecasterxd', `FluteBotXD Disconnected!`);
-                    client.disconnect();
-                    console.log(`Bot Disconnected`);
-                    break;
-                
+                    //Unmute Sounds
+                    case '!unmute':
+                        if (mute === true)
+                        {
+                            mute = false;
+                            client.say(target, `@${tags["display-name"]}, sounds unmuted`);
+                        }
+                        break;
+                    
+                    //Disconnect Bot
+                    case '!leave':
+                        client.action('Forecasterxd', `FluteBotXD Disconnected!`);
+                        client.disconnect();
+                        console.log(`Bot Disconnected`);
+                        break;
+                    
+                }
             }
         }
-        
+        catch(err)
+        {
+            console.log(err);
+        }
+
+        //Regular Commands
         switch(commandName)
         {
             //Test message to display hello (username)
@@ -179,7 +188,7 @@ function checkSounds(commandName)
     return false;
 }
         
-
+//Populates the Sounds Array
 function populateSounds()
 {
     console.log('Populating Sounds...');
