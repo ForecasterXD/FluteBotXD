@@ -65,9 +65,21 @@ function onMessageHandler (target, tags, msg, self)
                         if (mute === false)
                         {
                             mute = true;
-                            client.say(target, `@${tags["display-name"]}, sounds muted`);
+                            fetch('http://localhost:3000', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'text/plain',
+                            },
+                            body: commandName,
+                        })
+                            .then(response => response.text())
+                            .then(text => console.log(text))
+                            .then(client.say(target, `@${tags["display-name"]}, sounds muted`))
+                            .catch(error => {
+                                console.error('Error: ', error);
+                            })
                         }
-                        break;
+                        return;
 
                     //Unmute Sounds
                     case '!unmute':
@@ -76,14 +88,14 @@ function onMessageHandler (target, tags, msg, self)
                             mute = false;
                             client.say(target, `@${tags["display-name"]}, sounds unmuted`);
                         }
-                        break;
+                        return;
                     
                     //Disconnect Bot
                     case '!leave':
                         client.action('Forecasterxd', `FluteBotXD Disconnected!`);
                         client.disconnect();
                         console.log(`Bot Disconnected`);
-                        break;
+                        return;
                     
                 }
             }

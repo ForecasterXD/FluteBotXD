@@ -6,6 +6,7 @@
 
     <title>Sound Player</title>
     <script src='node_modules/howler/src/howler.core.js'></script>
+    <script>const ws = new WebSocket(`ws://${location.host}`);</script>
     
 
     
@@ -14,9 +15,9 @@
 <body>
     Sound Player Test
     <button onclick="playYeet()">Play</button>
-    <button id="AudioContext">Resume</button>
+    <button id="AudioContext"></button>
     <script> 
-        
+        //Test Function
         function playYeet()
         {
             var sound = new Howl({
@@ -26,17 +27,32 @@
             console.log('playing');
             ws.send('Playing Yeet');
         }
-        
+
+        //Main Play sound Function
         function playSound(command)
         {
-            let file = command.replace('!','');
-            file += '.mp3';
-            var sound = new Howl(
+            if (command !== '!mute')
+            {
+                let file = command.replace('!','');
+                file += '.mp3';
+                var sound = new Howl(
+                    {
+                        src: [`adlibs/${file}`]
+                    });
+                sound.play();
+
+                //Listen for Mute command to stop audioplayback when sounds are muted
+                ws.addEventListener('message', function(event)
                 {
-                    src: [`adlibs/${file}`]
+                    if (event.data === '!mute')
+                    {
+                        sound.stop();
+                        console.log('Client: Sounds Muted by Chat Bot, Playback Stopped');
+                    }
                 });
-            sound.play();
-            console.log(`Playing ${file}`);
+                console.log(`Playing ${file}`);
+            }
+            
         }
     </script>
     <script src='static/client.js'></script>

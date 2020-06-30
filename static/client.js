@@ -2,7 +2,7 @@
 var context = new AudioContext();
 
 //Establish Websocket to Server
-const ws = new WebSocket(`ws://${location.host}`);
+
 ws.addEventListener('open', function(event)
 {
     ws.send('connection established');
@@ -15,7 +15,16 @@ ws.addEventListener('message', function(event)
     {
         playSound(event.data);
     }
-})
+});
+//Load state of Audio Context Button
+if (context.state === 'suspended')
+{
+    document.getElementById('AudioContext').innerText = 'Resume';
+}
+if (context.state === 'running')
+{
+    document.getElementById('AudioContext').innerText = 'Running';
+}
 
 //Resume audio context with button
 document.getElementById('AudioContext').addEventListener('click', function()
@@ -28,17 +37,6 @@ document.getElementById('AudioContext').addEventListener('click', function()
             console.log(context.state);
         })
         document.getElementById('AudioContext').innerText = 'Stop';
-        
-    }
-    else if (context.state === 'running')
-    {
-        context.suspend().then(() => 
-        {
-            console.log('Client: Playback Suspended');
-            console.log(context.state);
-        })
-        document.getElementById('AudioContext').innerText = 'Resume';
-        
     }
 });
 
