@@ -25,9 +25,9 @@ const wss = new WebSocket.Server({ server });
 var clients = [];
 
 wss.on('connection', function(ws){
-    console.log('Incoming new client connection');
+    console.log('Server: Incoming new client connection');
     clients.push(ws);
-    console.log('Current Number of Clients: ' + clients.length);
+    console.log('Server: Current Number of Clients: ' + clients.length);
 
     //On Open Connection
     ws.on('open', function() 
@@ -42,10 +42,11 @@ wss.on('connection', function(ws){
         ws.send(`message received ${data}`);
         console.log(`Client: ${data}`);
     });
-
+    
+    //On Close
     ws.on('close', function()
     {
-        console.log('Connection Closed');
+        console.log('Server: Connection Closed');
         let index = clients.indexOf(ws);
         clients.splice(ws);
     })
